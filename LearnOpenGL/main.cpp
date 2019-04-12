@@ -105,7 +105,7 @@ int main() {
 		if (isEnableDepthTest && !glIsEnabled(GL_DEPTH_TEST)) glEnable(GL_DEPTH_TEST); 
 		else if (!isEnableDepthTest && glIsEnabled(GL_DEPTH_TEST)) glDisable(GL_DEPTH_TEST);
 
-		/*************************** render *********************************/
+		/*************************** render **********************************/
 		if (homework == "Homework2") {
 			simpleGraphics.render(edit_color);
 		}
