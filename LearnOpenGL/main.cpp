@@ -5,6 +5,7 @@
 #include "Bresenham.h"
 #include "Transformation.h"
 #include <string>
+#include <iostream>
 
 int main() {
 	/******************************** Initializations ************************************/
