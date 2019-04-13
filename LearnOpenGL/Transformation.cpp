@@ -3,11 +3,7 @@
 Transformation::Transformation()
 {
 	loadAndCreateTexture();
-	view = glm::lookAt(glm::vec3(0.0f, 8.0f, 16.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
-	MyGLFW::getInstance()->ourShader->setMat4("view", view);
-	MyGLFW::getInstance()->ourShader->setMat4("projection", projection);
-
+	
 	cubeTransParams.push_back(glm::vec3(1.0f, 0.0f, 1.0f));
 	cubeTransParams.push_back(glm::vec3(-1.0f, 0.0f, -1.0f));
 	cubeTransParams.push_back(glm::vec3(-0.5f, 0.5f * std::sqrt(3), 1.0f));
@@ -126,6 +122,12 @@ void Transformation::render()
 
 	// create transformations
 	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+	view = glm::lookAt(glm::vec3(0.0f, 8.0f, 16.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
+	MyGLFW::getInstance()->ourShader->setMat4("view", view);
+	MyGLFW::getInstance()->ourShader->setMat4("projection", projection);
 	const float time = speed * (float)glfwGetTime();
 	const float sint = std::sin(time);
 	const float cost = std::cos(time);

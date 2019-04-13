@@ -4,18 +4,14 @@
 
 CameraOperation::CameraOperation()
 {
-	loadAndCreateTexture();
-	view = glm::lookAt(glm::vec3(8.0f, 8.0f, 16.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
-	MyGLFW::getInstance()->ourShader->setMat4("view", view);
-	MyGLFW::getInstance()->ourShader->setMat4("projection", projection);
+	this->size = 2.0f;
+	this->speed = 3.0f;
+	this->option = 1;
+	this->projection_type = 0;
+	ortho_left = -10.0f, ortho_right = 10.0f, ortho_bottom = -10.0f, ortho_top = 10.0f, ortho_near = -10.0f, ortho_far = 30.0f;
+	fov = 45;
 
-	cubeTransParams.push_back(glm::vec3(1.0f, 0.0f, 1.0f));
-	cubeTransParams.push_back(glm::vec3(-1.0f, 0.0f, -1.0f));
-	cubeTransParams.push_back(glm::vec3(-0.5f, 0.5f * std::sqrt(3), 1.0f));
-	cubeTransParams.push_back(glm::vec3(-0.5f, -0.5f * std::sqrt(3), -1.0f));
-	cubeTransParams.push_back(glm::vec3(0.5f, -0.5 * std::sqrt(3), 1.0f));
-	cubeTransParams.push_back(glm::vec3(0.5f, 0.5 * std::sqrt(3), -1.0f));
+	loadAndCreateTexture();
 }
 
 
@@ -74,39 +70,28 @@ void CameraOperation::render()
 
 	// create transformations
 	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+	view = glm::lookAt(glm::vec3(8.0f, 8.0f, 16.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
+
 	const float time = speed * (float)glfwGetTime();
 	const float sint = std::sin(time);
 	const float cost = std::cos(time);
 	switch (option) {
-	case 1: model = glm::translate(model, glm::vec3(-1.5f, 0.5f, -1.5f)); break;	// Translation
-	case 2: model = glm::translate(model, glm::vec3(3.0f * sint, 0.0f, 0.0f)); break;	// Translation
-	case 3: model = glm::rotate(model, time, glm::vec3(1.0f, 0.0f, 1.0f)); break;	// Rotation
-	case 4: model = glm::scale(model, glm::vec3(1.0f + sint, 1.0f + sint, 1.0f + sint)); break;	// Scaling
-	case 5: {	// Draw an atom
-		const float r = 4.0f;
-		const float rsint = r * sint;
-		const float rcost = r * cost;
-		for (int i = 0; i < (int)cubeTransParams.size(); i++) {
-			// Electrons
-			model = glm::translate(glm::mat4(1.0f), glm::vec3(rcost, rcost, rsint) * cubeTransParams[i]);
-			model = glm::rotate(model, time, cubeTransParams[i]);
-			MyGLFW::getInstance()->ourShader->setMat4("model", model);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-
-			// Atomic nucleus (neutrons, protons)
-			model = glm::translate(glm::mat4(1.0f), size * glm::vec3(std::sin(random()), std::sin(random()), std::sin(random())));
-			model = glm::rotate(model, time, glm::vec3(std::sin(random()), std::sin(random()), std::sin(random())));
-			MyGLFW::getInstance()->ourShader->setMat4("model", model);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-		freeObjects();
-		return;
-	} break;
+	case 1: {
+		model = glm::translate(model, glm::vec3(-1.5f, 0.5f, -1.5f));
+		if (projection_type == 0) projection = glm::ortho(ortho_left, ortho_right, ortho_bottom, ortho_top, ortho_near, ortho_far);
+		else projection = glm::perspective(glm::radians(fov), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
+	} break;	// Translation
 	default: break;
 	}
 
 	// set matrix
 	MyGLFW::getInstance()->ourShader->setMat4("model", model);
+	MyGLFW::getInstance()->ourShader->setMat4("view", view);
+	MyGLFW::getInstance()->ourShader->setMat4("projection", projection);
+
 	// render
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	freeObjects();

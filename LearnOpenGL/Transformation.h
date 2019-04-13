@@ -17,9 +17,7 @@ public:
 
 private:
 	unsigned int texture1, texture2;
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-
+	
 	std::vector<glm::vec3> cubeTransParams;
 	std::default_random_engine random;
 
