@@ -12,7 +12,7 @@ uniform int flag = 0;
 
 void main()
 {
-	if (flag == 0) {
+	if (flag == 0 || flag == 2) {
 		FragColor = vec4(ourColor, 1.0f);
 	}
 	else if (flag == 1) {

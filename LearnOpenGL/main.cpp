@@ -4,6 +4,7 @@
 #include "SimpleGraphics.h"
 #include "Bresenham.h"
 #include "Transformation.h"
+#include "CameraOperation.h"
 
 int main() {
 	/******************************** Initializations ************************************/
@@ -14,10 +15,11 @@ int main() {
 	SimpleGraphics simpleGraphics;
 	Bresenham bresenham;
 	Transformation transformation;
+	CameraOperation cameraOperation;
 
 	/********************************** settings *****************************************/
 	ImVec4 edit_color = ImVec4(0.0f, 1.0f, 1.0f, 1.00f);
-	std::string homework = "Homework4";
+	std::string homework = "Homework5";
 	bool isEnableDepthTest = true;
 	glEnable(GL_DEPTH_TEST);	// configure global opengl state
 	
@@ -28,6 +30,7 @@ int main() {
 
 		MyGLFW::startImGui();
 		{
+			ImGui::ShowDemoWindow();
 			ImGui::Begin("Settings", (bool *)0, ImGuiWindowFlags_MenuBar);
 			if (ImGui::BeginMenuBar())
 			{
@@ -37,6 +40,7 @@ int main() {
 					if (ImGui::MenuItem("Homework2", "GUI and Draw simple graphics")) { homework = "Homework2";}
 					if (ImGui::MenuItem("Homework3", "Draw line")) { homework = "Homework3";}
 					if (ImGui::MenuItem("Homework4", "Transformation")) { homework = "Homework4"; }
+					if (ImGui::MenuItem("Homework5", "Camera")) { homework = "Homework5"; }
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenuBar();
@@ -63,6 +67,13 @@ int main() {
 						if (ImGui::MenuItem("Basic 3", "Rotation")) { transformation.option = 3; transformation.size = 2.0f; transformation.speed = 3.0f; }
 						if (ImGui::MenuItem("Basic 4", "Scaling")) { transformation.option = 4; transformation.size = 2.0f; transformation.speed = 3.0f; }
 						if (ImGui::MenuItem("Bonus 1", "Draw an atom")) { transformation.option = 5; transformation.size = 0.1f; transformation.speed = 10.0f; }
+					}
+					else if (homework == "Homework5") {
+						if (ImGui::MenuItem("Basic 1", "Simple Cube")) { cameraOperation.option = 1; cameraOperation.size = 2.0f; cameraOperation.speed = 3.0f; }
+						if (ImGui::MenuItem("Basic 2", "Translation")) { cameraOperation.option = 2; cameraOperation.size = 2.0f; cameraOperation.speed = 3.0f; }
+						if (ImGui::MenuItem("Basic 3", "Rotation")) { cameraOperation.option = 3; cameraOperation.size = 2.0f; cameraOperation.speed = 3.0f; }
+						if (ImGui::MenuItem("Basic 4", "Scaling")) { cameraOperation.option = 4; cameraOperation.size = 2.0f; cameraOperation.speed = 3.0f; }
+						if (ImGui::MenuItem("Bonus 1", "Draw an atom")) { cameraOperation.option = 5; cameraOperation.size = 0.1f; cameraOperation.speed = 10.0f; }
 					}
 					ImGui::EndMenu();
 				}
@@ -99,7 +110,7 @@ int main() {
 		}
 		/********************************************************************/
 
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 		if (isEnableDepthTest && !glIsEnabled(GL_DEPTH_TEST)) glEnable(GL_DEPTH_TEST); 
 		else if (!isEnableDepthTest && glIsEnabled(GL_DEPTH_TEST)) glDisable(GL_DEPTH_TEST);
@@ -113,6 +124,9 @@ int main() {
 		}
 		else if (homework == "Homework4") {
 			transformation.render();
+		}
+		else if (homework == "Homework5") {
+			cameraOperation.render();
 		}
 		/********************************************************************/
 

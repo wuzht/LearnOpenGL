@@ -16,9 +16,9 @@ void main()
 	if (flag == 0) {
 		gl_Position = vec4(aPos, 1.0);
 	}
-	else if (flag == 1) {
+	else if (flag == 1 || flag == 2) {
 		gl_Position = projection * view * model * vec4(aPos, 1.0);
-	}   
+	}
 	ourColor = aColor;
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 }

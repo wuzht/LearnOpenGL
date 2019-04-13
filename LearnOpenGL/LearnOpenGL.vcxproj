@@ -123,6 +123,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bresenham.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraOperation.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
@@ -138,6 +140,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bresenham.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraOperation.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_glfw.h" />
