@@ -9,9 +9,9 @@ public:
 	Transformation();
 	~Transformation();
 
-	float size = 2.0f;	// cube size
-	float speed = 3.0f;	// speed of movement
-	int option = 1;
+	float size;	// cube size
+	float speed;	// speed of movement
+	int option;
 
 	void render();
 

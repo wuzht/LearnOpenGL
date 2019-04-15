@@ -4,12 +4,14 @@
 
 CameraOperation::CameraOperation()
 {
+	this->EBO = 0, this->VAO = 0, this->VBO = 0;
+	this->texture1 = 0, this->texture2 = 0;
 	this->size = 2.0f;
-	this->speed = 3.0f;
-	this->option = 1;
+	this->speed = 2.0f;
+	this->option = 2;
 	this->projection_type = 0;
-	ortho_left = -10.0f, ortho_right = 10.0f, ortho_bottom = -10.0f, ortho_top = 10.0f, ortho_near = -10.0f, ortho_far = 30.0f;
-	fov = 45;
+	this->ortho_left = -10.0f, this->ortho_right = 10.0f, this->ortho_bottom = -10.0f, this->ortho_top = 10.0f, this->ortho_near = -10.0f, this->ortho_far = 30.0f;
+	this->fov = 45;
 
 	loadAndCreateTexture();
 }
@@ -72,18 +74,22 @@ void CameraOperation::render()
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
-	view = glm::lookAt(glm::vec3(8.0f, 8.0f, 16.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	//projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
-
+	
 	const float time = speed * (float)glfwGetTime();
 	const float sint = std::sin(time);
 	const float cost = std::cos(time);
+	const float camera_radius = 16.0f;
 	switch (option) {
 	case 1: {
 		model = glm::translate(model, glm::vec3(-1.5f, 0.5f, -1.5f));
+		view = glm::lookAt(glm::vec3(8.0f, 8.0f, 16.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		if (projection_type == 0) projection = glm::ortho(ortho_left, ortho_right, ortho_bottom, ortho_top, ortho_near, ortho_far);
 		else projection = glm::perspective(glm::radians(fov), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
-	} break;	// Translation
+	} break;
+	case 2: {
+		view = glm::lookAt(glm::vec3(std::sin(time) * camera_radius, 0.0f, std::cos(time) * camera_radius), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
+	} break;
 	default: break;
 	}
 

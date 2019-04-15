@@ -2,6 +2,11 @@
 
 Transformation::Transformation()
 {
+	this->EBO = 0, this->VAO = 0, this->VBO = 0;
+	this->texture1 = 0, this->texture2 = 0;
+	this->size = 2.0f;	// cube size
+	this->speed = 3.0f;	// speed of movement
+	this->option = 1;
 	loadAndCreateTexture();
 	
 	cubeTransParams.push_back(glm::vec3(1.0f, 0.0f, 1.0f));
