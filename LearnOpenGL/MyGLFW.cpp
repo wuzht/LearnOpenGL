@@ -36,6 +36,8 @@ bool MyGLFW::init(const int scr_width, const int scr_height)
 {
 	this->scr_width = scr_width;
 	this->scr_height = scr_height;
+	this->deltaTime = 0.0f;
+
 	glfwInit();	// 初始化GLFW
 
 	// 告诉GLFW我们要使用的OpenGL版本是3.3
@@ -109,19 +111,19 @@ void MyGLFW::freeImGui()
 	ImGui::DestroyContext();
 }
 
-/*
- * 当用户改变窗口的大小的时候，视口也应该被调整。
- * 我们可以对窗口注册一个回调函数(Callback Function)，
- * 它会在每次窗口大小被调整的时候被调用。
- */
 void MyGLFW::framebuffer_size_callback(GLFWwindow * window, int width, int height)
 {
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
 
 void MyGLFW::processInput(GLFWwindow * window)
 {
 	// 检查用户是否按下了返回键(Esc)
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::FORWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::BACKWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::RIGHT, deltaTime);
 }

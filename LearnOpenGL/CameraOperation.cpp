@@ -8,7 +8,7 @@ CameraOperation::CameraOperation()
 	this->texture1 = 0, this->texture2 = 0;
 	this->size = 2.0f;
 	this->speed = 2.0f;
-	this->option = 2;
+	this->option = 3;
 	this->projection_type = 0;
 	this->ortho_left = -10.0f, this->ortho_right = 10.0f, this->ortho_bottom = -10.0f, this->ortho_top = 10.0f, this->ortho_near = -10.0f, this->ortho_far = 30.0f;
 	this->fov = 45;
@@ -88,6 +88,10 @@ void CameraOperation::render()
 	} break;
 	case 2: {
 		view = glm::lookAt(glm::vec3(sint * camera_radius, 0.0f, cost * camera_radius), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
+	} break;
+	case 3: {
+		view = MyGLFW::getInstance()->camera.getViewMatrix();
 		projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
 	} break;
 	default: break;

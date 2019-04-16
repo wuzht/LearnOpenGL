@@ -16,6 +16,7 @@ int main() {
 	Bresenham bresenham;
 	Transformation transformation;
 	CameraOperation cameraOperation;
+	float lastFrame = 0.0f;
 
 	/********************************** settings *****************************************/
 	ImVec4 edit_color = ImVec4(0.0f, 1.0f, 1.0f, 1.00f);
@@ -26,9 +27,11 @@ int main() {
 	
 	/******************************** Render Loop ****************************************/
 	while (!glfwWindowShouldClose(MyGLFW::getInstance()->window)) {
-		MyGLFW::processInput(MyGLFW::getInstance()->window);
-		glfwPollEvents();
-
+		float currentFrame = (float)glfwGetTime();
+		MyGLFW::getInstance()->deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		MyGLFW::getInstance()->processInput(MyGLFW::getInstance()->window);
+		
 		MyGLFW::startImGui();
 		{
 			ImGui::Begin("Settings", (bool *)0, ImGuiWindowFlags_MenuBar);
@@ -144,10 +147,11 @@ int main() {
 			case 5: cameraOperation.render(); break;
 			default: break;
 		}
+		MyGLFW::renderImGui();
 		/********************************************************************/
 
-		MyGLFW::renderImGui();
 		glfwSwapBuffers(MyGLFW::getInstance()->window);
+		glfwPollEvents();
 	}
 
 	MyGLFW::freeImGui();

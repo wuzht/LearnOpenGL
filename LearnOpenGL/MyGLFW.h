@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "Shader.h"
+#include "Camera.h"
 
 
 /* 将GLFW常用操作封装成MyGLFW类，方便使用 */
@@ -29,7 +30,10 @@ class MyGLFW
 public:
 	GLFWwindow* window;
 	Shader *ourShader;
+	Camera camera;
+	float deltaTime; // time between current frame and last frame
 
+	/**************************************************************/
 	// Singleton
 	static MyGLFW* getInstance();
 	// 初始化GLFW
@@ -49,10 +53,10 @@ public:
 	static void freeImGui();
 
 	/**************************************************************/
-	// 每次窗口大小被调整的时候被调用的回调函数
+	// glfw: whenever the window size changed (by OS or user resize) this callback function executes
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-	// 处理输入事件
-	static void processInput(GLFWwindow *window);
+	// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+	void processInput(GLFWwindow *window);
 
 private:
 	MyGLFW();
