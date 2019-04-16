@@ -87,7 +87,7 @@ void CameraOperation::render()
 		else projection = glm::perspective(glm::radians(fov), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
 	} break;
 	case 2: {
-		view = glm::lookAt(glm::vec3(std::sin(time) * camera_radius, 0.0f, std::cos(time) * camera_radius), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		view = glm::lookAt(glm::vec3(sint * camera_radius, 0.0f, cost * camera_radius), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
 	} break;
 	default: break;
