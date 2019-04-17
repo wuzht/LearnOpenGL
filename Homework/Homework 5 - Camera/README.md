@@ -78,7 +78,7 @@ projection = glm::ortho(left, right, bottom, top, near, far);
     </tr>
 </table>
 
-可以看到，当增大`left`时，cube向左移动，并发生拉伸。这是因为平截头体的左平面向右移动了，逐渐向cube靠近，至于为什么发生拉伸，是因为我们的窗口是800*800的正方形窗口，而现在的平截头体的近平面/远平面已经不是正方形了，所以发生了拉伸。
+可以看到，当增大`left`时，cube向左移动，并发生拉伸。这是因为平截头体的左平面向右移动了，逐渐向cube靠近，至于为什么发生拉伸，是因为这里的窗口是800*800的正方形窗口，而现在的平截头体的近平面/远平面已经不是正方形了，所以发生了拉伸。
 
 当增大`rigth`时，cube向左移动，发生压缩拉伸，此时平截头体的右平面向右移动，逐渐远离cube，与增大`left`同理，现在的平截头体的近平面/远平面已经不是正方形了，所以发生了拉伸。
 
@@ -111,6 +111,8 @@ glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width/(float
         <td><center><img src="assets/per_2.png">增大fov</center></td>
     </tr>
 </table>
+
+
 
 可以看出，减小fov时，视野减小，所以窗口中显示的cube会看起来比较大；增大fov时，视野增大，cube看起来较小。
 
@@ -168,6 +170,12 @@ projection = glm::perspective(glm::radians(45.0f), (float)MyGLFW::getInstance()-
 在现实生活中，我们一般将摄像机摆放的空间 **View matrix** 和被拍摄的物体摆设的空间 **Model matrix** 分开，但
 是在OpenGL中却将两个合二为一设为 **ModelView matrix**，通过上面的作业启发，你认为是为什么呢？在报
 告中写入。（Hints：你可能有不止一个摄像机）
+
+图形管道通常涉及从 model space 到 world space、从 world space 到 view space 以及从 view space 到 clip space 的转换。存在一个转换矩阵，将这几个变换矩阵都组合到一起（分别是 world、view 和 projection 变换）。
+
+因为每个转换都是一个矩阵，所以可以组合它们：可以创建 model-view 矩阵或 view-projection 矩阵，甚至可以创建单个组合的 model-view-projection 矩阵。它们都是完全合理的，事实上在适当的时候使用得相当普遍。
+
+在经典的图形管道理论和 OpenGL 固定管线里，将 model-to-world 和 world-to-view 结合被认为是标准实践。这样做是因为在 view space 中有一个非常常见的原因：它简化了照明效果的计算。
 
 
 
