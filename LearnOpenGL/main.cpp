@@ -5,21 +5,22 @@
 #include "Bresenham.h"
 #include "Transformation.h"
 #include "CameraOperation.h"
+#include "Lighting.h"
 
 int main() {
 	/******************************** Initializations ************************************/
 	MyGLFW::getInstance()->init(800, 800);
-	MyGLFW::getInstance()->complileAndUseShader("GLSL/shader.vs", "GLSL/shader.fs");
 	MyGLFW::initImGui(MyGLFW::getInstance()->window);
 
 	SimpleGraphics simpleGraphics;
 	Bresenham bresenham;
 	Transformation transformation;
 	CameraOperation cameraOperation;
+	Lighting lighting;
 
 	/********************************** settings *****************************************/
 	ImVec4 edit_color = ImVec4(0.0f, 1.0f, 1.0f, 1.00f);
-	int hw = 5;
+	int hw = 6;
 	bool show_demo_window = false;
 	bool isEnableDepthTest = true;
 	glEnable(GL_DEPTH_TEST);	// configure global opengl state
@@ -64,6 +65,11 @@ int main() {
 						if (ImGui::MenuItem("Basic 1", "Projection")) { hw = 5; cameraOperation.option = 1; }
 						if (ImGui::MenuItem("Basic 2", "View Changing")) { hw = 5; cameraOperation.option = 2; }
 						if (ImGui::MenuItem("Bonus 1", "Look around")) { hw = 5; cameraOperation.option = 3; MyGLFW::getInstance()->resetCamera(); }
+						ImGui::EndMenu();
+					}
+					if (ImGui::BeginMenu("Homework6")) {
+						if (ImGui::MenuItem("Basic", "Lighting Model")) { hw = 6; }
+						if (ImGui::MenuItem("Bonus 1", "Move light")) { hw = 6; }
 						ImGui::EndMenu();
 					}
 					ImGui::EndMenu();
@@ -124,6 +130,9 @@ int main() {
 					}
 					
 				} break;
+				case 6: {
+					
+				} break;
 				default: break;
 			}
 
@@ -144,6 +153,7 @@ int main() {
 			case 3: bresenham.render(edit_color); break;
 			case 4: transformation.render(); break;
 			case 5: cameraOperation.render(); break;
+			case 6: lighting.render(); break;
 			default: break;
 		}
 		MyGLFW::renderImGui();

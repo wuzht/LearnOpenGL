@@ -69,6 +69,9 @@
     <ClCompile Include="CameraOperation.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImGui\imconfig.h">
@@ -116,12 +119,27 @@
     <ClInclude Include="CameraOperation.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="GLSL\shader.fs">
       <Filter>源文件\GLSL</Filter>
     </None>
     <None Include="GLSL\shader.vs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\lamp.fs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\lamp.vs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\lighting.fs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\lighting.vs">
       <Filter>源文件\GLSL</Filter>
     </None>
   </ItemGroup>

@@ -10,6 +10,7 @@ SimpleGraphics::~SimpleGraphics()
 
 void SimpleGraphics::render(const ImVec4 & edit_color)
 {
+	MyGLFW::getInstance()->ourShader->use();
 	MyGLFW::getInstance()->ourShader->setInt("flag", 0);
 	// ¶¥µã
 	float vertices[] = {

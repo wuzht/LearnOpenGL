@@ -41,7 +41,6 @@ public:
 	static MyGLFW* getInstance();
 	// ³õÊ¼»¯GLFW
 	bool init(const int scr_width, const int scr_height);
-	void complileAndUseShader(const GLchar * vertexPath, const GLchar * fragmentPath);
 	const unsigned int getScrWidth() const { return this->scr_width; };
 	const unsigned int getScrHeight() const { return this->scr_height; };
 

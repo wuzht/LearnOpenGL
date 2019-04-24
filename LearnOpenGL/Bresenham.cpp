@@ -10,6 +10,7 @@ Bresenham::~Bresenham()
 
 void Bresenham::render(const ImVec4 & color)
 {
+	MyGLFW::getInstance()->ourShader->use();
 	if (option == 1) {
 		drawTriangle(tri_vertices[0][0], tri_vertices[0][1], tri_vertices[1][0],
 			tri_vertices[1][1], tri_vertices[2][0], tri_vertices[2][1], color);

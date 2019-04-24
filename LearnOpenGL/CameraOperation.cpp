@@ -23,6 +23,7 @@ CameraOperation::~CameraOperation()
 
 void CameraOperation::render()
 {
+	MyGLFW::getInstance()->ourShader->use();
 	MyGLFW::getInstance()->ourShader->setInt("flag", 2);
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	float vertices[] = {

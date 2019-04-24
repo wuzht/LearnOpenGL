@@ -134,6 +134,7 @@
     <ClCompile Include="ImGui\imgui_impl_glfw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyGLFW.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -152,12 +153,17 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="Lighting.h" />
     <ClInclude Include="MyGLFW.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleGraphics.h" />
     <ClInclude Include="Transformation.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GLSL\lamp.fs" />
+    <None Include="GLSL\lamp.vs" />
+    <None Include="GLSL\lighting.fs" />
+    <None Include="GLSL\lighting.vs" />
     <None Include="GLSL\shader.fs" />
     <None Include="GLSL\shader.vs" />
   </ItemGroup>

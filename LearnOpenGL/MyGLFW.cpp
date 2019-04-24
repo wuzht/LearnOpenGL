@@ -77,16 +77,9 @@ bool MyGLFW::init(const int scr_width, const int scr_height)
 	glfwSetFramebufferSizeCallback(this->window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(this->window, mouse_callback);
 	glfwSetScrollCallback(this->window, scroll_callback);
-	return true;
-}
 
-void MyGLFW::complileAndUseShader(const GLchar * vertexPath, const GLchar * fragmentPath)
-{
-	// build and compile our shader program
-	// -------------------------------------
-	ourShader = new Shader(vertexPath, fragmentPath);
-	// ¼¤»î×ÅÉ«Æ÷
-	ourShader->use();
+	this->ourShader = new Shader("GLSL/shader.vs", "GLSL/shader.fs");
+	return true;
 }
 
 void MyGLFW::resetCamera()
