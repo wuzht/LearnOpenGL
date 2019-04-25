@@ -131,7 +131,14 @@ int main() {
 					
 				} break;
 				case 6: {
-					
+					ImGui::Text("Homework6 - Lights and Shading");
+					ImGui::Checkbox("Enable depth test", &isEnableDepthTest);
+					ImGui::RadioButton("Phong", &lighting.isPhong, 1); ImGui::SameLine();
+					ImGui::RadioButton("Gouraud", &lighting.isPhong, 0);
+					ImGui::SliderFloat("ambient", &lighting.ambientStrength, 0.0f, 1.0f);
+					ImGui::SliderFloat("diffuse", &lighting.diffuseStrength, 0.0f, 1.0f);
+					ImGui::SliderFloat("specular", &lighting.specularStrength, 0.0f, 1.0f);
+					ImGui::SliderInt("shininess", &lighting.shininess, 2, 256);
 				} break;
 				default: break;
 			}

@@ -6,7 +6,14 @@ Lighting::Lighting()
 {
 	this->lightingShader = new Shader("GLSL/lighting.vs", "GLSL/lighting.fs");
 	this->lampShader = new Shader("GLSL/lamp.vs", "GLSL/lamp.fs");
-	this->lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
+	this->lightPos = glm::vec3(-1.0f, 1.0f, -1.0f);
+	this->viewPos = glm::vec3(2.0f, 1.5f, 3.0f);
+
+	this->ambientStrength = 0.1f;
+	this->diffuseStrength = 1.0f;
+	this->specularStrength = 0.5f;
+	this->shininess = 32;
+	this->isPhong = 1;
 }
 
 
@@ -24,48 +31,49 @@ Lighting::~Lighting()
 
 void Lighting::render()
 {
+	// set up vertex data (and buffer(s)) and configure vertex attributes
 	float vertices[] = {
-		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-		-0.5f, -0.5f,  0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
 
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-		-0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 	
 	// first, configure the cube's VAO (and VBO)
@@ -79,8 +87,12 @@ void Lighting::render()
 	glBindVertexArray(cubeVAO);
 
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 
 	// second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
 	unsigned int lightVAO;
@@ -90,24 +102,28 @@ void Lighting::render()
 	// we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 
 
 	// be sure to activate shader when setting uniforms/drawing objects
 	lightingShader->use();
+	lightingShader->setInt("isPhong", this->isPhong);
+	lightingShader->setFloat("ambientStrength", this->ambientStrength);
+	lightingShader->setFloat("diffuseStrength", this->diffuseStrength);
+	lightingShader->setFloat("specularStrength", this->specularStrength);
+	lightingShader->setInt("shininess", this->shininess);
 	lightingShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 	lightingShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	lightingShader->setVec3("lightPos", this->lightPos);
+	lightingShader->setVec3("viewPos", this->viewPos);
+	//lightingShader->setVec3("viewPos", MyGLFW::getInstance()->camera.getPosition());
 
 	// view/projection transformations
-	glm::mat4 projection = glm::perspective(
-		glm::radians(MyGLFW::getInstance()->camera.getZoom()),
-		(float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(),
-		0.1f, 100.0f
-	);
+	glm::mat4 projection = glm::perspective(glm::radians(MyGLFW::getInstance()->camera.getZoom()), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
 	//glm::mat4 view = MyGLFW::getInstance()->camera.getViewMatrix();
-	glm::mat4 view = glm::lookAt(glm::vec3(3.0f, 3.0f, 8.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 view = glm::lookAt(viewPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	lightingShader->setMat4("projection", projection);
 	lightingShader->setMat4("view", view);
 
@@ -125,7 +141,7 @@ void Lighting::render()
 	lampShader->setMat4("projection", projection);
 	lampShader->setMat4("view", view);
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, lightPos);
+	model = glm::translate(model, this->lightPos);
 	model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
 	lampShader->setMat4("model", model);
 
