@@ -6,7 +6,7 @@
 
 主要代码在 `Lighting` 类中，着色器代码在 `GLSL` 文件夹中，分别是 `lighting.vs, lighting.fs` 和 `lamp.vs, lamp.fs` 。
 
-
+[TOC]
 
 ## 1 Basic
 
@@ -29,7 +29,7 @@
 
 #### 实现原理
 
-##### Phong Shading
+##### Phong Illumination
 
 在现实世界中，光照是非常复杂的，会收到很多因素的影响，这是我们优先的计算能力所无法模拟的。因此在实践中通常会使用一些简化的模型，对现实的光照进行模拟，大大降低了计算量，并且看起来还是比较真实的。而其中一个模型被称为冯氏光照模型(Phong Lighting Model)。冯氏光照模型的主要结构由3个分量组成：环境(Ambient)、漫反射(Diffuse)和镜面(Specular)光照。下面这张图展示了这些光照分量看起来的样子：
 
@@ -131,18 +131,59 @@ vec3 result = (ambient + diffuse + specular) * objectColor;
 FragColor = vec4(result, 1.0f);
 ```
 
-##### Gouraud Shading
+##### Phong Shading & Gouraud Shading
 
 在光照着色器的早期，开发者曾经在顶点着色器中实现冯氏光照模型。在顶点着色器中做光照的优势是，相比片段来说，顶点要少得多，因此会更高效，所以（开销大的）光照计算频率会更低。然而，顶点着色器中的最终颜色值是仅仅只是那个顶点的颜色值，片段的颜色值是由插值光照颜色所得来的。结果就是这种光照看起来不会非常真实，除非使用了大量顶点。
 
 在顶点着色器中实现的冯氏光照模型叫做Gouraud着色(Gouraud Shading)，而不是冯氏着色(Phong Shading)。由于插值，这种光照看起来有点逊色。冯氏着色能产生更平滑的光照效果。
 
-总结一下两种 Shading 模型：
 
-* Gouraud Shading 在顶点着色器中实现。它对每个顶点来计算冯氏光照，然后通过插值来计算片段的颜色值。
-* Phong Shading 在片段着色器中实现。它对每个像素点来计算冯氏光照。
 
-在顶点着色器中，计算冯氏光照得到顶点的颜色，然后传给片段着色器：
+illumination 和 shading 的区别：
+
+* illumination: (顶点 / 像素的) 颜色的计算方法，包含环境光、漫反射、镜面反射
+
+* shading: 计算每个像素点的颜色
+
+Phong Shading 在片段着色器中实现。实现步骤: 
+1. 对顶点的邻接面的法向量求平均，得到每个得到每个顶点的法向量
+2. 对顶点法向量进行线性插值，得到每个像素的法向量
+3. 根据每个像素点的法向量，计算 Phong illumination 得到每个像素的颜色
+
+Gouraud Shading 在顶点着色器中实现。实现步骤: 
+1. 对顶点的邻接面的法向量求平均，得到每个顶点的法向量 (同 Phong Shading 步骤 1)
+2. 根据每个顶点的法向量，计算 Phong illumination 得到每个顶点的颜色
+3. 通过双线性插值对顶点颜色进行插值，得到每个像素的颜色
+
+
+
+###### Phong Shading
+
+在片段着色器中，把 Phong illumination 的三种光照加起来：
+
+```c++
+// ambiant
+vec3 ambient = ambientStrength * lightColor;
+
+// diffuse
+vec3 norm = normalize(Normal);
+vec3 lightDir = normalize(lightPos - FragPos);
+float diff = max(dot(norm, lightDir), 0.0);
+vec3 diffuse = diffuseStrength * diff * lightColor;
+
+// specular
+vec3 viewDir = normalize(viewPos - FragPos);
+vec3 reflectDir = reflect(-lightDir, norm);  
+float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+vec3 specular = specularStrength * spec * lightColor; 
+
+vec3 result = (ambient + diffuse + specular) * objectColor;
+FragColor = vec4(result, 1.0f);
+```
+
+###### Gouraud Shading
+
+在顶点着色器中，计算 Phong illumination 得到顶点的颜色，然后传给片段着色器：
 
 ```c++
 Normal = mat3(transpose(inverse(model))) * aNormal;
@@ -179,7 +220,7 @@ LightingColor = ambient + diffuse + specular;
 > * GUI里可以切换两种shading
 > * 使用如进度条这样的控件，使ambient因子、diffuse因子、specular因子、反光度等参数可调节，光照效果实时更改
 
-#### 实现思路与结果
+#### 实现方法与结果
 
 实现效果见演示视频。
 
@@ -196,7 +237,7 @@ LightingColor = ambient + diffuse + specular;
 
 > 当前光源为静止状态，尝试使光源在场景中来回移动，光照效果实时更改。
 
-#### 实现思路与结果
+#### 实现方法与结果
 
 实现效果见演示视频。
 
