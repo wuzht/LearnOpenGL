@@ -1,7 +1,7 @@
 #pragma once
 #include "MyGLFW.h"
 
-/* Homework6 - Lights and Shading */
+/* Homework 6 - Lights and Shading */
 class Lighting
 {
 public:

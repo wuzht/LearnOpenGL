@@ -6,6 +6,7 @@
 #include "Transformation.h"
 #include "CameraOperation.h"
 #include "Lighting.h"
+#include "ShadowMapping.h"
 
 int main() {
 	/******************************** Initializations ************************************/
@@ -17,10 +18,11 @@ int main() {
 	Transformation transformation;
 	CameraOperation cameraOperation;
 	Lighting lighting;
+	ShadowMapping shadowMapping;
 
 	/********************************** settings *****************************************/
 	ImVec4 edit_color = ImVec4(0.0f, 1.0f, 1.0f, 1.00f);
-	int hw = 6;
+	int hw = 7;
 	bool show_demo_window = false;
 	bool isEnableDepthTest = true;
 	glEnable(GL_DEPTH_TEST);	// configure global opengl state
@@ -70,6 +72,11 @@ int main() {
 					if (ImGui::BeginMenu("Homework6")) {
 						if (ImGui::MenuItem("Basic", "Lighting Model")) { hw = 6; lighting.option = 0; }
 						if (ImGui::MenuItem("Bonus", "Move light")) { hw = 6; lighting.option = 1; }
+						ImGui::EndMenu();
+					}
+					if (ImGui::BeginMenu("Homework7")) {
+						if (ImGui::MenuItem("Basic", "Shadow Mapping")) { hw = 7; }
+						if (ImGui::MenuItem("Bonus", "Shadow Mapping")) { hw = 7; }
 						ImGui::EndMenu();
 					}
 					ImGui::EndMenu();
@@ -140,6 +147,10 @@ int main() {
 					ImGui::SliderFloat("specular", &lighting.specularStrength, 0.0f, 1.0f);
 					ImGui::SliderInt("shininess", &lighting.shininess, 2, 256);
 				} break;
+				case 7: {
+					ImGui::Text("Homework7 - Shadowing Mapping");
+					ImGui::Checkbox("Enable depth test", &isEnableDepthTest);
+				} break;
 				default: break;
 			}
 
@@ -148,7 +159,7 @@ int main() {
 		}
 		/********************************************************************/
 
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 		if (isEnableDepthTest && !glIsEnabled(GL_DEPTH_TEST)) glEnable(GL_DEPTH_TEST); 
 		else if (!isEnableDepthTest && glIsEnabled(GL_DEPTH_TEST)) glDisable(GL_DEPTH_TEST);
@@ -161,6 +172,7 @@ int main() {
 			case 4: transformation.render(); break;
 			case 5: cameraOperation.render(); break;
 			case 6: lighting.render(); break;
+			case 7: shadowMapping.render(); break;
 			default: break;
 		}
 		MyGLFW::renderImGui();

@@ -72,6 +72,9 @@
     <ClCompile Include="Lighting.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowMapping.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImGui\imconfig.h">
@@ -122,6 +125,9 @@
     <ClInclude Include="Lighting.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowMapping.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="GLSL\shader.fs">
@@ -140,6 +146,24 @@
       <Filter>源文件\GLSL</Filter>
     </None>
     <None Include="GLSL\lighting.vs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\debug_quad.vs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\debug_quad_depth.fs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\shadow_mapping_depth.fs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\shadow_mapping_depth.vs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\shadow_mapping.fs">
+      <Filter>源文件\GLSL</Filter>
+    </None>
+    <None Include="GLSL\shadow_mapping.vs">
       <Filter>源文件\GLSL</Filter>
     </None>
   </ItemGroup>

@@ -78,6 +78,9 @@ bool MyGLFW::init(const int scr_width, const int scr_height)
 	glfwSetCursorPosCallback(this->window, mouse_callback);
 	glfwSetScrollCallback(this->window, scroll_callback);
 
+	// tell GLFW to capture our mouse
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	this->ourShader = new Shader("GLSL/shader.vs", "GLSL/shader.fs");
 	return true;
 }

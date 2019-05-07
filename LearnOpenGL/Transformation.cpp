@@ -80,6 +80,8 @@ void Transformation::render()
 {
 	MyGLFW::getInstance()->ourShader->use();
 	MyGLFW::getInstance()->ourShader->setInt("flag", 1);
+	MyGLFW::getInstance()->ourShader->setInt("texture1", 0);
+	MyGLFW::getInstance()->ourShader->setInt("texture2", 1);
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	float vertices[] = {
 		-size, -size, -size,	0.0f, 0.0f, 0.0f,	 0.0f, 0.0f,

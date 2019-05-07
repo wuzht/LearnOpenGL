@@ -1,7 +1,7 @@
 #pragma once
 #include "MyGLFW.h"
 
-/* Homework5 - Camera */
+/* Homework 5 - Camera */
 class CameraOperation
 {
 public:
