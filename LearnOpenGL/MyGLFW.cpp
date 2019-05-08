@@ -11,6 +11,8 @@ float MyGLFW::lastX = 0.0f;
 float MyGLFW::lastY = 0.0f;
 bool MyGLFW::firstMouse = true;
 
+int MyGLFW::hw7_shadow_projection_type = 0;
+
 MyGLFW::MyGLFW()
 {
 }
@@ -79,7 +81,7 @@ bool MyGLFW::init(const int scr_width, const int scr_height)
 	glfwSetScrollCallback(this->window, scroll_callback);
 
 	// tell GLFW to capture our mouse
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	this->ourShader = new Shader("GLSL/shader.vs", "GLSL/shader.fs");
 	return true;
@@ -134,6 +136,8 @@ void MyGLFW::processInput(GLFWwindow * window)
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)) MyGLFW::resetCamera();
+	if (glfwGetKey(window, GLFW_KEY_O)) MyGLFW::hw7_shadow_projection_type = 0;	// orthographic
+	if (glfwGetKey(window, GLFW_KEY_P)) MyGLFW::hw7_shadow_projection_type = 1; // perspective
 }
 
 void MyGLFW::framebuffer_size_callback(GLFWwindow * window, int width, int height)

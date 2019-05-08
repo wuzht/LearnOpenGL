@@ -36,6 +36,9 @@ public:
 	static float deltaTime; // time between current frame and last frame
 	static float lastFrame;
 
+	// hw7
+	static int hw7_shadow_projection_type;
+
 	/**************************************************************/
 	// Singleton
 	static MyGLFW* getInstance();

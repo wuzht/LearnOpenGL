@@ -15,6 +15,7 @@ private:
 	Shader* simpleDepthShader;
 	Shader* debugDepthQuad;
 	unsigned int planeVAO;
+	unsigned int planeVBO;
 	unsigned int cubeVAO;
 	unsigned int cubeVBO;
 	unsigned int quadVAO;

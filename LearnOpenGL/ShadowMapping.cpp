@@ -32,11 +32,10 @@ ShadowMapping::ShadowMapping()
 	};
 
 	// plane VAO
-	unsigned int planeVBO;
 	glGenVertexArrays(1, &this->planeVAO);
-	glGenBuffers(1, &planeVBO);
+	glGenBuffers(1, &this->planeVBO);
 	glBindVertexArray(this->planeVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->planeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -55,8 +54,12 @@ ShadowMapping::ShadowMapping()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	GLfloat borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 	// attach depth texture as FBO's depth buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
@@ -88,6 +91,10 @@ ShadowMapping::~ShadowMapping()
 		delete this->debugDepthQuad;
 		this->debugDepthQuad = nullptr;
 	}
+	// optional: de-allocate all resources once they've outlived their purpose:
+	// ------------------------------------------------------------------------
+	glDeleteVertexArrays(1, &this->planeVAO);
+	glDeleteBuffers(1, &this->planeVBO);
 }
 
 void ShadowMapping::render()
@@ -97,57 +104,54 @@ void ShadowMapping::render()
 	glm::mat4 lightProjection, lightView;
 	glm::mat4 lightSpaceMatrix;
 	float near_plane = 1.0f, far_plane = 7.5f;
-	lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-	lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+
+	if (MyGLFW::hw7_shadow_projection_type == 0) lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+	else lightProjection = glm::perspective(glm::radians(90.0f), (GLfloat)this->SHADOW_WIDTH / (GLfloat)this->SHADOW_HEIGHT, 1.0f, 25.0f);
+
+	lightView = glm::lookAt(this->lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
 	lightSpaceMatrix = lightProjection * lightView;
 	// render scene from light's point of view
 	this->simpleDepthShader->use();
 	this->simpleDepthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
-	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glCullFace(GL_FRONT);
+	glViewport(0, 0, this->SHADOW_WIDTH, this->SHADOW_HEIGHT);
+	glBindFramebuffer(GL_FRAMEBUFFER, this->depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, this->woodTexture);
 	renderScene(this->simpleDepthShader);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	// reset viewport
-	glViewport(0, 0, MyGLFW::getInstance()->getScrWidth(), MyGLFW::getInstance()->getScrHeight());
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glCullFace(GL_BACK); // 不要忘记设回原先的culling face
 
 	// 2. render scene as normal using the generated depth/shadow map  
 	// --------------------------------------------------------------
+	// reset viewport
 	glViewport(0, 0, MyGLFW::getInstance()->getScrWidth(), MyGLFW::getInstance()->getScrHeight());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	shader->use();
+	this->shader->use();
 	glm::mat4 projection = glm::perspective(glm::radians(MyGLFW::camera.getZoom()), (float)MyGLFW::getInstance()->getScrWidth() / (float)MyGLFW::getInstance()->getScrHeight(), 0.1f, 100.0f);
 	glm::mat4 view = MyGLFW::camera.getViewMatrix();
-	shader->setMat4("projection", projection);
-	shader->setMat4("view", view);
+	this->shader->setMat4("projection", projection);
+	this->shader->setMat4("view", view);
 	// set light uniforms
-	shader->setVec3("viewPos", MyGLFW::camera.getPosition());
-	shader->setVec3("lightPos", lightPos);
-	shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+	this->shader->setVec3("viewPos", MyGLFW::camera.getPosition());
+	this->shader->setVec3("lightPos", lightPos);
+	this->shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, woodTexture);
+	glBindTexture(GL_TEXTURE_2D, this->woodTexture);
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, depthMap);
-	renderScene(shader);
+	glBindTexture(GL_TEXTURE_2D, this->depthMap);
+	renderScene(this->shader);
 
 	// render Depth map to quad for visual debugging
 	// ---------------------------------------------
-	this->debugDepthQuad->use();
+	/*this->debugDepthQuad->use();
 	this->debugDepthQuad->setFloat("near_plane", near_plane);
 	this->debugDepthQuad->setFloat("far_plane", far_plane);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
-	renderQuad();
-
-	// optional: de-allocate all resources once they've outlived their purpose:
-	// ------------------------------------------------------------------------
-	/*glDeleteVertexArrays(1, &planeVAO);
-	glDeleteBuffers(1, &planeVBO);*/
+	renderQuad();*/
 }
 
 unsigned int ShadowMapping::loadTexture(char const * path)

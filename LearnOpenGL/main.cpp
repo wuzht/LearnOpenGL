@@ -150,6 +150,8 @@ int main() {
 				case 7: {
 					ImGui::Text("Homework7 - Shadowing Mapping");
 					ImGui::Checkbox("Enable depth test", &isEnableDepthTest);
+					ImGui::RadioButton("orthographic (press O)", &MyGLFW::hw7_shadow_projection_type, 0);
+					ImGui::RadioButton("perspective (press P)", &MyGLFW::hw7_shadow_projection_type, 1);
 				} break;
 				default: break;
 			}
