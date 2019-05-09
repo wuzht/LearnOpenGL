@@ -2,9 +2,9 @@
 
 > **Introduction**
 >
-> 相信大家在课堂上也体会到阴影对场景渲染真实性的重要性。本次作业大家将要实现Shadowing Mapping，并尽可能去优化。本次作业量较大，也希望大家能在彻底理解Shadowing Mapping的算法后再开始编程实现。
+> 相信大家在课堂上也体会到阴影对场景渲染真实性的重要性。本次作业大家将要实现 Shadowing Mapping，并尽可能去优化。本次作业量较大，也希望大家能在彻底理解 Shadowing Mapping 的算法后再开始编程实现。
 
-主要代码在 `Lighting` 类中，着色器代码在 `GLSL` 文件夹中，分别是 `lighting.vs, lighting.fs` 和 `lamp.vs, lamp.fs` 。
+主要代码在 `ShadowMapping` 类中，着色器代码在 `GLSL` 文件夹中，分别是 `shadow_mapping_depth.vs, shadow_mapping_depth.fs` 和 `shadow_mapping.vs, shadow_mapping.fs` 。
 
 [TOC]
 
@@ -340,12 +340,12 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 #### 2.1.1 实现结果
 
+实现结果见演示视频
+
 * 按下键盘 O 键，切换到光源正交投影
 * 按下键盘 P 键，切换到光源透视投影
 * 按下键盘 1 键，显示鼠标 cursor
 * 按下键盘 2 键，隐藏鼠标 cursor
-
-实现结果见演示视频
 
 <table>
     <tr>
@@ -390,7 +390,7 @@ lightSpaceMatrix = lightProjection * lightView;
 
 如果不做这一步，我们可以看到地板四边形渲染出很大一块交替黑线。这种阴影贴图的不真实感叫做**阴影失真(Shadow Acne)**，下图解释了成因：
 
-![shadow_mapping_acne_diagram](../../../shadow_mapping_acne_diagram.png)
+![shadow_mapping_acne_diagram](assets/shadow_mapping_acne_diagram.png)
 
 因为阴影贴图受限于解析度，在距离光源比较远的情况下，多个片元可能从深度贴图的同一个值中去采样。图片每个斜坡代表深度贴图一个单独的纹理像素。你可以看到，多个片元从同一个深度值进行采样。
 
