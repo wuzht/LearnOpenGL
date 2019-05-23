@@ -80,9 +80,6 @@ bool MyGLFW::init(const int scr_width, const int scr_height)
 	glfwSetCursorPosCallback(this->window, mouse_callback);
 	glfwSetScrollCallback(this->window, scroll_callback);
 
-	// tell GLFW to capture our mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
 	this->ourShader = new Shader("GLSL/shader.vs", "GLSL/shader.fs");
 	return true;
 }
@@ -135,9 +132,13 @@ void MyGLFW::processInput(GLFWwindow * window)
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::BACKWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) MyGLFW::camera.processKeyBoard(Camera::RIGHT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)) MyGLFW::resetCamera();
-	if (glfwGetKey(window, GLFW_KEY_O)) MyGLFW::hw7_shadow_projection_type = 0;	// orthographic
-	if (glfwGetKey(window, GLFW_KEY_P)) MyGLFW::hw7_shadow_projection_type = 1; // perspective
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) MyGLFW::resetCamera();
+
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) MyGLFW::hw7_shadow_projection_type = 0;	// orthographic
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) MyGLFW::hw7_shadow_projection_type = 1; // perspective
+
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void MyGLFW::framebuffer_size_callback(GLFWwindow * window, int width, int height)

@@ -54,8 +54,6 @@ ShadowMapping::ShadowMapping()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	GLfloat borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -105,6 +103,7 @@ void ShadowMapping::render()
 	glm::mat4 lightSpaceMatrix;
 	float near_plane = 1.0f, far_plane = 7.5f;
 
+	// 选择光源投影方式，正交投影 或 透视投影
 	if (MyGLFW::hw7_shadow_projection_type == 0) lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 	else lightProjection = glm::perspective(glm::radians(90.0f), (GLfloat)this->SHADOW_WIDTH / (GLfloat)this->SHADOW_HEIGHT, 1.0f, 25.0f);
 

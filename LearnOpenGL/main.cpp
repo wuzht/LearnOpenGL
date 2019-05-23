@@ -26,6 +26,7 @@ int main() {
 	bool show_demo_window = false;
 	bool isEnableDepthTest = true;
 	glEnable(GL_DEPTH_TEST);	// configure global opengl state
+	glfwSetInputMode(MyGLFW::getInstance()->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // tell GLFW to capture our mouse
 	
 	/******************************** Render Loop ****************************************/
 	while (!glfwWindowShouldClose(MyGLFW::getInstance()->window)) {
@@ -75,8 +76,7 @@ int main() {
 						ImGui::EndMenu();
 					}
 					if (ImGui::BeginMenu("Homework7")) {
-						if (ImGui::MenuItem("Basic", "Shadow Mapping")) { hw = 7; }
-						if (ImGui::MenuItem("Bonus", "Shadow Mapping")) { hw = 7; }
+						if (ImGui::MenuItem("Basic & Bonus", "Shadow Mapping")) { hw = 7; }
 						ImGui::EndMenu();
 					}
 					ImGui::EndMenu();
