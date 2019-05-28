@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BezierCurve.cpp" />
     <ClCompile Include="Bresenham.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraOperation.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="Bresenham.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraOperation.h" />

@@ -22,7 +22,7 @@
 
 #include "Shader.h"
 #include "Camera.h"
-
+#include "BezierCurve.h"
 
 /* 将GLFW常用操作封装成MyGLFW类，方便使用 */
 class MyGLFW
@@ -68,6 +68,10 @@ public:
 	static void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 	// glfw: whenever the mouse scroll wheel scrolls, this callback is called
 	static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
+	// mouse button
+	static void mouse_button_callback(GLFWwindow * window, int button, int action, int mods);
+	// key
+	static void key_callback(GLFWwindow *window, int key, int scanmode, int action, int mods);
 
 private:
 	MyGLFW();

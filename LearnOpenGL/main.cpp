@@ -7,6 +7,7 @@
 #include "CameraOperation.h"
 #include "Lighting.h"
 #include "ShadowMapping.h"
+#include "BezierCurve.h"
 
 int main() {
 	/******************************** Initializations ************************************/
@@ -19,15 +20,15 @@ int main() {
 	CameraOperation cameraOperation;
 	Lighting lighting;
 	ShadowMapping shadowMapping;
+	BezierCurve::getInstance();
 
 	/********************************** settings *****************************************/
-	ImVec4 edit_color = ImVec4(0.0f, 1.0f, 1.0f, 1.00f);
-	int hw = 7;
+	ImVec4 edit_color = ImVec4(0.0f, 1.0f, 1.0f, 1.0f);
+	int hw = 8;
 	bool show_demo_window = false;
 	bool isEnableDepthTest = true;
 	glEnable(GL_DEPTH_TEST);	// configure global opengl state
-	glfwSetInputMode(MyGLFW::getInstance()->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // tell GLFW to capture our mouse
-	
+
 	/******************************** Render Loop ****************************************/
 	while (!glfwWindowShouldClose(MyGLFW::getInstance()->window)) {
 		float currentFrame = (float)glfwGetTime();
@@ -77,6 +78,10 @@ int main() {
 					}
 					if (ImGui::BeginMenu("Homework7")) {
 						if (ImGui::MenuItem("Basic & Bonus", "Shadow Mapping")) { hw = 7; }
+						ImGui::EndMenu();
+					}
+					if (ImGui::BeginMenu("Homework8")) {
+						if (ImGui::MenuItem("Basic & Bonus", "Bezier Curve")) { hw = 8; }
 						ImGui::EndMenu();
 					}
 					ImGui::EndMenu();
@@ -153,6 +158,9 @@ int main() {
 					ImGui::RadioButton("orthographic (press O)", &MyGLFW::hw7_shadow_projection_type, 0);
 					ImGui::RadioButton("perspective (press P)", &MyGLFW::hw7_shadow_projection_type, 1);
 				} break;
+				case 8: {
+					ImGui::Text("Homework8 - Bezier Curve");
+				} break;
 				default: break;
 			}
 
@@ -161,7 +169,7 @@ int main() {
 		}
 		/********************************************************************/
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 		if (isEnableDepthTest && !glIsEnabled(GL_DEPTH_TEST)) glEnable(GL_DEPTH_TEST); 
 		else if (!isEnableDepthTest && glIsEnabled(GL_DEPTH_TEST)) glDisable(GL_DEPTH_TEST);
@@ -175,6 +183,7 @@ int main() {
 			case 5: cameraOperation.render(); break;
 			case 6: lighting.render(); break;
 			case 7: shadowMapping.render(); break;
+			case 8: BezierCurve::getInstance()->render(); break;
 			default: break;
 		}
 		MyGLFW::renderImGui();

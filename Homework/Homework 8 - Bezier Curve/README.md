@@ -4,7 +4,7 @@
 >
 > 本次作业要求大家实现一个Bezier Curve的绘制小工具。此工具可以接受鼠标输入。
 
-主要代码在 `ShadowMapping` 类中，着色器代码在 `GLSL` 文件夹中，分别是 `shadow_mapping_depth.vs, shadow_mapping_depth.fs` 和 `shadow_mapping.vs, shadow_mapping.fs` 。
+主要代码在 `BezierCurve` 类中
 
 [TOC]
 
@@ -32,9 +32,3 @@
 ## 2 Bonus
 
 > 可以动态地呈现Bezier曲线的生成过程。
-
-
-## 3 References
-
-* [阴影映射](https://learnopengl-cn.github.io/05%20Advanced%20Lighting/03%20Shadows/01%20Shadow%20Mapping/)
-* [Shadow Mapping](https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping)

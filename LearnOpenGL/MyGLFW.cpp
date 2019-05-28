@@ -79,6 +79,8 @@ bool MyGLFW::init(const int scr_width, const int scr_height)
 	glfwSetFramebufferSizeCallback(this->window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(this->window, mouse_callback);
 	glfwSetScrollCallback(this->window, scroll_callback);
+	glfwSetMouseButtonCallback(this->window, mouse_button_callback);
+	glfwSetKeyCallback(this->window, key_callback);
 
 	this->ourShader = new Shader("GLSL/shader.vs", "GLSL/shader.fs");
 	return true;
@@ -139,6 +141,8 @@ void MyGLFW::processInput(GLFWwindow * window)
 
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	//if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) BezierCurve::getInstance()->isDrawing = !BezierCurve::getInstance()->isDrawing;
 }
 
 void MyGLFW::framebuffer_size_callback(GLFWwindow * window, int width, int height)
@@ -150,6 +154,9 @@ void MyGLFW::framebuffer_size_callback(GLFWwindow * window, int width, int heigh
 
 void MyGLFW::mouse_callback(GLFWwindow * window, double xpos, double ypos)
 {
+	BezierCurve::getInstance()->mouse_x = xpos;
+	BezierCurve::getInstance()->mouse_y = ypos;
+
 	if (MyGLFW::firstMouse) {
 		MyGLFW::lastX = (float)xpos;
 		MyGLFW::lastY = (float)ypos;
@@ -165,4 +172,34 @@ void MyGLFW::mouse_callback(GLFWwindow * window, double xpos, double ypos)
 void MyGLFW::scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
 	camera.processMouseScroll((float)yoffset);
+}
+
+void MyGLFW::mouse_button_callback(GLFWwindow * window, int button, int action, int mods)
+{
+	if (action == GLFW_PRESS && !BezierCurve::getInstance()->isDrawing) {
+		switch (button)
+		{
+			case GLFW_MOUSE_BUTTON_LEFT: {
+				float x = 2.0f * (float)BezierCurve::getInstance()->mouse_x / (float)MyGLFW::getInstance()->getScrWidth() - 1.0f;
+				float y = 1.0f - 2.0f * (float)BezierCurve::getInstance()->mouse_y / (float)MyGLFW::getInstance()->getScrHeight();
+				BezierCurve::getInstance()->ctrlPoints.push_back(glm::vec2(x, y));
+			} break;
+			case GLFW_MOUSE_BUTTON_RIGHT: {
+				if (!BezierCurve::getInstance()->ctrlPoints.empty()) {
+					BezierCurve::getInstance()->ctrlPoints.pop_back();
+				}	
+			} break;
+			default: break;
+		}
+	}
+}
+
+void MyGLFW::key_callback(GLFWwindow * window, int key, int scanmode, int action, int mods)
+{
+	if (action == GLFW_PRESS && key == GLFW_KEY_ENTER) {
+		if (BezierCurve::getInstance()->isDrawing) {
+			BezierCurve::getInstance()->cur_t = 0.0;
+		}
+		BezierCurve::getInstance()->isDrawing = !BezierCurve::getInstance()->isDrawing;
+	}
 }
