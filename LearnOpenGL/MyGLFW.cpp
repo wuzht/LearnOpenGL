@@ -176,7 +176,7 @@ void MyGLFW::scroll_callback(GLFWwindow * window, double xoffset, double yoffset
 
 void MyGLFW::mouse_button_callback(GLFWwindow * window, int button, int action, int mods)
 {
-	if (action == GLFW_PRESS && !BezierCurve::getInstance()->isDrawing) {
+	if (MyGLFW::getInstance()->hw == 8 && action == GLFW_PRESS && !BezierCurve::getInstance()->isDrawing) {
 		switch (button)
 		{
 			case GLFW_MOUSE_BUTTON_LEFT: {
@@ -196,7 +196,7 @@ void MyGLFW::mouse_button_callback(GLFWwindow * window, int button, int action, 
 
 void MyGLFW::key_callback(GLFWwindow * window, int key, int scanmode, int action, int mods)
 {
-	if (action == GLFW_PRESS && key == GLFW_KEY_ENTER) {
+	if (MyGLFW::getInstance()->hw == 8 && action == GLFW_PRESS && key == GLFW_KEY_ENTER) {
 		if (BezierCurve::getInstance()->isDrawing) {
 			BezierCurve::getInstance()->cur_t = 0.0;
 		}

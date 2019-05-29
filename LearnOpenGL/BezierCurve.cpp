@@ -7,11 +7,6 @@ BezierCurve::BezierCurve()
 	this->mouse_x = 0.0;
 	this->mouse_y = 0.0;
 	this->cur_t = 0.0;
-	this->ctrlPoints.push_back(glm::vec2(-0.7f, -0.6f));
-	this->ctrlPoints.push_back(glm::vec2(-0.5f, 0.5f));
-	this->ctrlPoints.push_back(glm::vec2(0.4f, 0.6f));
-	this->ctrlPoints.push_back(glm::vec2(0.9f, -0.7f));
-	this->ctrlPoints.push_back(glm::vec2(0.1f, -0.5f));
 }
 
 BezierCurve::~BezierCurve()

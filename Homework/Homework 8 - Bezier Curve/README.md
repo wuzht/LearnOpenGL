@@ -25,6 +25,7 @@
         <td><center><img src="assets/2.png"></center></td>
     </tr>
 </table>
+
 ### 1.2 实现方法
 
 #### 1.2.1 实现鼠标添加或删除控制点
@@ -49,7 +50,9 @@ glfwSetCursorPosCallback(this->window, mouse_callback);
 
 定义 `mouse_button_callback`  函数，当用户点击鼠标左键时，将控制点压入 (push_back) 到 `ctrlPoints` 容器的末端；当用户点击鼠标右键时，若 `ctrlPoints` 非空，则弹出 (pop_back) 容器内末端的控制点。
 
-这里应该注意的是，`mouse_callback` 获取的鼠标坐标的所在的坐标系，是以窗口左上角为原点、向右为 x 轴正方向、向下为 y 轴正方向的。这还不是 OpenGL 的标准化设备坐标 (NDC)，而后面画控制点时，就要用到 NDC 坐标，所以要做一些转换，将控制点的坐标转成 NDC 坐标。
+这里应该注意的是，`mouse_callback` 获取的鼠标坐标的所在的坐标系，是以窗口左上角为原点、向右为 x 轴正方向、向下为 y 轴正方向的 (下图右边的坐标系)。这还不是 OpenGL 的标准化设备坐标 (NDC, 下图左边的坐标系)，而后面画控制点时，就要用到 NDC 坐标，所以要做一些转换，将控制点的坐标转成 NDC 坐标。
+
+![3](assets/3.png)
 
 另外，如果正在显示画图过程 (`isDrawing == true`，在 2.2 中说明)，则不允许增加或删除控制点。
 

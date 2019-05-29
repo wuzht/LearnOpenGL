@@ -36,6 +36,8 @@ public:
 	static float deltaTime; // time between current frame and last frame
 	static float lastFrame;
 
+	int hw = 8;
+
 	// hw7
 	static int hw7_shadow_projection_type;
 

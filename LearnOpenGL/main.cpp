@@ -167,8 +167,9 @@ int main() {
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
 		}
-		/********************************************************************/
 
+		MyGLFW::getInstance()->hw = hw;
+		/********************************************************************/
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 		if (isEnableDepthTest && !glIsEnabled(GL_DEPTH_TEST)) glEnable(GL_DEPTH_TEST); 
